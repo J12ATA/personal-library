@@ -43,8 +43,8 @@ app.listen(process.env.PORT || 3000, () => {
         runner.run();
       } catch(e) {
         const error = e;
-          console.log('Tests are not valid:');
-          console.log(error);
+        console.log('Tests are not valid:');
+        console.log(error);
       }
     }, 1500);
   }
