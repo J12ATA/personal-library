@@ -51,7 +51,7 @@ module.exports = app => {
   app.delete('/api/books', (req, res, next) => {
     Library.deleteMany({}, (err, emptyLibrary) => {
       if (err) next(err);
-      res.status(200).send('complete delete successful');
+      return res.status(200).send('complete delete successful');
     });
   });
 
@@ -75,8 +75,10 @@ module.exports = app => {
     }, { new: true }, (err, updatedBook) => {
       if (err) next(err);
       const { _id, title, comments } = updatedBook.value;
-      if (comments.length === 0) return res.status(200).json({ _id, title, comments: [comment] });
-      else return res.status(200).json({ _id, title, comments });
+      if (!comments) return res.status(200).json({ _id, title, comments: [comment] });
+      const commentsArray = comments;
+      commentsArray.push(comment);
+      return res.status(200).json({ _id, title, comments: commentsArray });
     });
   });
     
@@ -85,7 +87,7 @@ module.exports = app => {
     if (!ObjectId.isValid(_id)) return res.status(200).send('no book exists');
     Library.deleteOne({ _id: ObjectId(_id) }, (err, updatedLibrary) => {
       if (err) next(err);
-      res.status(200).send('delete successful');
+      return res.status(200).send('delete successful');
     });
   });
 };
