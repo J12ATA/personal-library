@@ -1,11 +1,3 @@
-/*
-*
-*
-*       Complete the API routing below
-*       
-*       
-*/
-
 'use strict';
 
 const mongo = require('mongodb');
@@ -66,11 +58,11 @@ module.exports = app => {
     });
   });
     
-  app.post('/api/books/:_id', async (req, res, next) => {
+  app.post('/api/books/:_id', (req, res, next) => {
     const { _id } = req.params;
     const { comment } = req.body;
     if (!ObjectId.isValid(_id)) return res.status(200).send('no book exists');
-    await Library.findOneAndUpdate({ _id: ObjectId(_id) }, { 
+    Library.findOneAndUpdate({ _id: ObjectId(_id) }, {
       $push: { comments: comment } 
     }, { new: true }, (err, updatedBook) => {
       if (err) next(err);
